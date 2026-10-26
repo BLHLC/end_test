@@ -1,5 +1,7 @@
 package com.BLH.end.adapter;
 
+import android.content.Intent;
+import com.BLH.end.activity.ShopDetailActivity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +46,13 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ViewHolder> {
 
         // 用 Picasso 加载网络图片
         Picasso.get().load(shop.getLogo()).into(holder.ivLogo);
+        // 在 ShopAdapter 的 onBindViewHolder 中加上：
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ShopDetailActivity.class);
+            // 核心考点：Intent 传递 Serializable 实体对象
+            intent.putExtra("shop", shop);
+            context.startActivity(intent);
+        });
     }
 
     @Override
