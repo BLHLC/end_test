@@ -2,7 +2,6 @@ package com.BLH.end.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +12,7 @@ import com.BLH.end.adapter.MenuAdapter;
 import com.BLH.end.bean.CartBean;
 import com.BLH.end.bean.ShopBean;
 import com.BLH.end.db.CartDao;
+import java.io.Serializable;
 import java.util.List;
 
 public class ShopDetailActivity extends AppCompatActivity implements MenuAdapter.OnCartChangeListener {
@@ -20,6 +20,7 @@ public class ShopDetailActivity extends AppCompatActivity implements MenuAdapter
     private ShopBean shopBean;
     private CartDao cartDao;
     private TextView tvTotal;
+    private MenuAdapter adapter; // 提升为全局变量，方便在 onResume 中刷新
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,7 @@ public class ShopDetailActivity extends AppCompatActivity implements MenuAdapter
         TextView tvName = findViewById(R.id.tv_detail_shop_name);
         TextView tvAnnounce = findViewById(R.id.tv_detail_announcement);
         tvTotal = findViewById(R.id.tv_cart_total);
-        Button btnCheckout = findViewById(R.id.btn_checkout);
+        TextView btnCheckout = findViewById(R.id.btn_checkout); // 这里最好用 TextView，因为你 XML 里可能是 TextView
 
         tvName.setText(shopBean.getShopName());
         tvAnnounce.setText("公告：" + shopBean.getAnnouncement());
@@ -47,22 +48,35 @@ public class ShopDetailActivity extends AppCompatActivity implements MenuAdapter
         // 3. 设置商品列表
         RecyclerView recyclerView = findViewById(R.id.recycler_view_menu);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        MenuAdapter adapter = new MenuAdapter(this, shopBean.getFoods(), shopBean.getShopId(), this);
+        adapter = new MenuAdapter(this, shopBean.getFoods(), shopBean.getShopId(), this);
         recyclerView.setAdapter(adapter);
 
         // 4. 初始化总价
         updateCartTotal();
 
-        // 5. 去结算点击事件 (暂时只做提示，Step 4 详细写)
+        // 5. 去结算点击事件
         btnCheckout.setOnClickListener(v -> {
             List<CartBean> cartList = cartDao.getCartListByShop(shopBean.getShopId());
             if (cartList.isEmpty()) {
                 Toast.makeText(this, "购物车是空的哦", Toast.LENGTH_SHORT).show();
             } else {
-                // 去订单页面 (将在 Step 4 实现)
-                Toast.makeText(this, "即将跳转订单页", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(ShopDetailActivity.this, OrderActivity.class);
+                intent.putExtra("cartList", (Serializable) cartList);
+                intent.putExtra("shopId", shopBean.getShopId());
+                intent.putExtra("shopName", shopBean.getShopName());
+                startActivity(intent);
             }
         });
+    }
+
+    // 核心修复：每次页面回到前台（比如从订单页退回来），重新刷新界面
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (adapter != null) {
+            adapter.notifyDataSetChanged(); // 刷新列表里的加减号
+            updateCartTotal(); // 刷新底部总价
+        }
     }
 
     // 更新底部总价
@@ -75,7 +89,6 @@ public class ShopDetailActivity extends AppCompatActivity implements MenuAdapter
         tvTotal.setText("¥" + total);
     }
 
-    // 实现接口，当点击加减号时，回调刷新总价
     @Override
     public void onCartChanged() {
         updateCartTotal();

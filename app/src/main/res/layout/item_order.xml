@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp">
+
+    <TextView
+        android:id="@+id/tv_order_food_name"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="商品名称"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_order_food_count"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:text="x1"
+        android:gravity="center"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_order_food_subtotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="¥0.0"
+        android:textColor="#FF9800"
+        android:textStyle="bold"
+        android:textSize="14sp" />
+</LinearLayout>

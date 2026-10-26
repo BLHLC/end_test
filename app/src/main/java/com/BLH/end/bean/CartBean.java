@@ -1,6 +1,7 @@
 package com.BLH.end.bean;
+import java.io.Serializable;
 
-public class CartBean {
+public class CartBean implements Serializable {
     private int id; // 数据库自增主键
     private int shopId;
     private int foodId;
