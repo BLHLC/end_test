@@ -17,7 +17,6 @@ public class CartDao {
     }
 
     // 1. 添加商品到购物车
-    // 修改方法签名，增加 shopName
     public void addToCart(int shopId, String shopName, FoodBean food) {
         SQLiteDatabase db = helper.getWritableDatabase();
         Cursor cursor = db.query("cart", null, "shop_id=? AND food_id=?",
@@ -32,7 +31,7 @@ public class CartDao {
         } else {
             ContentValues values = new ContentValues();
             values.put("shop_id", shopId);
-            values.put("shop_name", shopName); // 新增存店名
+            values.put("shop_name", shopName); // 存店名
             values.put("food_id", food.getFoodId());
             values.put("food_name", food.getFoodName());
             values.put("price", food.getPrice());
@@ -43,9 +42,6 @@ public class CartDao {
         cursor.close();
         db.close();
     }
-
-    // 修改 getCartListByShop 和 getAllCartList 里面解析 Cursor 的地方，加上：
-    // bean.setShopName(cursor.getString(cursor.getColumnIndexOrThrow("shop_name")));
 
     // 2. 减少商品数量
     public void minusCart(int shopId, int foodId) {
@@ -69,7 +65,7 @@ public class CartDao {
         db.close();
     }
 
-    // 3. 查询某家店购物车里的所有商品 (这就是报错缺少的方法)
+    // 3. 查询某家店购物车里的所有商品 (补上了 shop_name 的读取)
     public List<CartBean> getCartListByShop(int shopId) {
         SQLiteDatabase db = helper.getReadableDatabase();
         List<CartBean> list = new ArrayList<>();
@@ -80,6 +76,7 @@ public class CartDao {
             CartBean bean = new CartBean();
             bean.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
             bean.setShopId(cursor.getInt(cursor.getColumnIndexOrThrow("shop_id")));
+            bean.setShopName(cursor.getString(cursor.getColumnIndexOrThrow("shop_name"))); // 新增：读取店名
             bean.setFoodId(cursor.getInt(cursor.getColumnIndexOrThrow("food_id")));
             bean.setFoodName(cursor.getString(cursor.getColumnIndexOrThrow("food_name")));
             bean.setPrice(cursor.getDouble(cursor.getColumnIndexOrThrow("price")));
@@ -99,7 +96,7 @@ public class CartDao {
         db.close();
     }
 
-    // 5. 获取全局购物车（跨店铺）用于 CartFragment
+    // 5. 获取全局购物车（补上了 shop_name 的读取）
     public List<CartBean> getAllCartList() {
         SQLiteDatabase db = helper.getReadableDatabase();
         List<CartBean> list = new ArrayList<>();
@@ -108,6 +105,7 @@ public class CartDao {
             CartBean bean = new CartBean();
             bean.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
             bean.setShopId(cursor.getInt(cursor.getColumnIndexOrThrow("shop_id")));
+            bean.setShopName(cursor.getString(cursor.getColumnIndexOrThrow("shop_name"))); // 新增：读取店名
             bean.setFoodId(cursor.getInt(cursor.getColumnIndexOrThrow("food_id")));
             bean.setFoodName(cursor.getString(cursor.getColumnIndexOrThrow("food_name")));
             bean.setPrice(cursor.getDouble(cursor.getColumnIndexOrThrow("price")));
@@ -139,7 +137,8 @@ public class CartDao {
         db.delete("cart", null, null);
         db.close();
     }
-    // 删除特定商品
+
+    // 8. 删除特定商品
     public void deleteItem(int shopId, int foodId) {
         SQLiteDatabase db = helper.getWritableDatabase();
         db.delete("cart", "shop_id=? AND food_id=?", new String[]{String.valueOf(shopId), String.valueOf(foodId)});

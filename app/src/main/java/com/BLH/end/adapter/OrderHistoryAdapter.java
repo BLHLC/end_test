@@ -13,10 +13,17 @@ import java.util.List;
 public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapter.ViewHolder> {
     private Context context;
     private List<String> orderList;
+    private OnItemClickListener listener;
 
-    public OrderHistoryAdapter(Context context, List<String> orderList) {
+    // 定义点击接口
+    public interface OnItemClickListener {
+        void onItemClick(String orderInfo);
+    }
+
+    public OrderHistoryAdapter(Context context, List<String> orderList, OnItemClickListener listener) {
         this.context = context;
         this.orderList = orderList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -28,7 +35,15 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.tvInfo.setText(orderList.get(position));
+        String orderInfo = orderList.get(position);
+        holder.tvInfo.setText(orderInfo);
+
+        // 设置点击事件
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(orderInfo);
+            }
+        });
     }
 
     @Override

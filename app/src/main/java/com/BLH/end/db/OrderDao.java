@@ -22,7 +22,7 @@ public class OrderDao {
     public List<String> getAllOrders() {
         SQLiteDatabase db = helper.getReadableDatabase();
         List<String> list = new ArrayList<>();
-        Cursor cursor = db.query("orders", null, null, null, null, null, "id DESC"); // 倒序，最新的在最上面
+        Cursor cursor = db.query("orders", null, null, null, null, null, "id DESC"); // 倒序
         while (cursor.moveToNext()) {
             String orderNo = cursor.getString(cursor.getColumnIndexOrThrow("order_no"));
             String shopName = cursor.getString(cursor.getColumnIndexOrThrow("shop_name"));
@@ -30,12 +30,56 @@ public class OrderDao {
             int status = cursor.getInt(cursor.getColumnIndexOrThrow("status"));
             String statusStr = (status == 1) ? "已支付" : "未支付";
 
-            list.add("订单号：" + orderNo + "\n店铺：" + shopName + "\n金额：￥" + price + " (" + statusStr + ")");
+            // 新增：读取下单时间
+            String createTime = cursor.getString(cursor.getColumnIndexOrThrow("create_time"));
+
+            // 拼接字符串，把时间加在店铺名下面
+            list.add("订单号：" + orderNo +
+                    "\n店铺：" + shopName +
+                    "\n时间：" + createTime +
+                    "\n金额：￥" + price + " (" + statusStr + ")");
         }
         cursor.close();
         db.close();
         return list;
     }
+
+    // 根据订单号，查询该订单下的所有商品明细
+    public List<String> getOrderItemsByOrderNo(String orderNo) {
+        SQLiteDatabase db = helper.getReadableDatabase();
+        List<String> items = new ArrayList<>();
+
+        // 1. 先根据 order_no 查 orders 表，拿到主键 id
+        Cursor orderCursor = db.query("orders", new String[]{"id"}, "order_no=?",
+                new String[]{orderNo}, null, null, null);
+
+        int orderId = -1;
+        if (orderCursor.moveToFirst()) {
+            orderId = orderCursor.getInt(0);
+        }
+        orderCursor.close();
+
+        // 2. 如果找到了对应的订单 id，就去 order_item 表查明细
+        if (orderId != -1) {
+            Cursor itemCursor = db.query("order_item", null, "order_id=?",
+                    new String[]{String.valueOf(orderId)}, null, null, null);
+            while (itemCursor.moveToNext()) {
+                String shopName = itemCursor.getString(itemCursor.getColumnIndexOrThrow("shop_name"));
+                String foodName = itemCursor.getString(itemCursor.getColumnIndexOrThrow("food_name"));
+                double price = itemCursor.getDouble(itemCursor.getColumnIndexOrThrow("price"));
+                int count = itemCursor.getInt(itemCursor.getColumnIndexOrThrow("count"));
+
+                // 格式化成字符串：店铺名 - 商品名 x数量 (单价)
+                String str = "【" + (shopName == null ? "未知店铺" : shopName) + "】 "
+                        + foodName + " x" + count + " (¥" + price + ")";
+                items.add(str);
+            }
+            itemCursor.close();
+        }
+        db.close();
+        return items;
+    }
+
     // 提交订单
     // 提交订单（支持多店合并，shopId 传 0 代表合并订单）
     public void submitOrder(int shopId, String shopName, List<CartBean> cartList, String address, String phone) {
