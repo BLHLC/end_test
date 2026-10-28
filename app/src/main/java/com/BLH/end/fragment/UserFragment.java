@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.BLH.end.R;
+import com.BLH.end.activity.AddressListActivity;
 import com.BLH.end.activity.OrderHistoryActivity;
 import com.BLH.end.utils.UserManager;
 
@@ -34,7 +35,10 @@ public class UserFragment extends Fragment {
             Intent intent = new Intent(getActivity(), OrderHistoryActivity.class);
             startActivity(intent);
         });
-
+        // 跳转到地址管理页面
+        view.findViewById(R.id.layout_my_address).setOnClickListener(v -> {
+            startActivity(new Intent(getActivity(), AddressListActivity.class));
+        });
         return view;
     }
 }

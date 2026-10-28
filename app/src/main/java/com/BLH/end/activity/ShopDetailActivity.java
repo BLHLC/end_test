@@ -12,6 +12,8 @@ import com.BLH.end.adapter.MenuAdapter;
 import com.BLH.end.bean.CartBean;
 import com.BLH.end.bean.ShopBean;
 import com.BLH.end.db.CartDao;
+import com.BLH.end.utils.UIUtils;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -26,7 +28,7 @@ public class ShopDetailActivity extends AppCompatActivity implements MenuAdapter
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop_detail);
-
+        UIUtils.setStatusBarPadding(this);
         shopBean = (ShopBean) getIntent().getSerializableExtra("shop");
         if (shopBean == null) {
             finish();

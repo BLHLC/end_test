@@ -72,5 +72,27 @@
             android:textColor="#999999"
             android:textSize="18sp" />
     </LinearLayout>
-
+    <LinearLayout
+        android:id="@+id/layout_my_address"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="1dp"
+        android:background="#FFFFFF"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="15dp">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="收货地址管理"
+            android:textColor="#333333"
+            android:textSize="16sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=">"
+            android:textColor="#999999"
+            android:textSize="18sp" />
+    </LinearLayout>
 </LinearLayout>

@@ -7,6 +7,7 @@ import android.os.Looper;
 import androidx.appcompat.app.AppCompatActivity;
 import com.BLH.end.MainActivity;
 import com.BLH.end.R;
+import com.BLH.end.utils.UIUtils;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -14,7 +15,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
+        UIUtils.setStatusBarPadding(this);
         // 隐藏顶部标题栏
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();

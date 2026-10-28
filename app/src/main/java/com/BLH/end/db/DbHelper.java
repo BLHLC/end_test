@@ -7,14 +7,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DbHelper extends SQLiteOpenHelper {
 
     public DbHelper(Context context) {
-        // 确保版本号是 3
-        super(context, "dessert.db", null, 3);
+        // 1. 将版本号直接改大，比如改成 5
+        super(context, "dessert.db", null, 5);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // 1. 购物车表 (新增 shop_name)
-        String createCart = "CREATE TABLE cart (" +
+        // 创建购物车表
+        db.execSQL("CREATE TABLE cart (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "shop_id INTEGER NOT NULL, " +
                 "shop_name TEXT, " +
@@ -22,11 +22,10 @@ public class DbHelper extends SQLiteOpenHelper {
                 "food_name TEXT NOT NULL, " +
                 "price REAL NOT NULL, " +
                 "count INTEGER NOT NULL DEFAULT 1, " +
-                "image TEXT)";
-        db.execSQL(createCart);
+                "image TEXT)");
 
-        // 2. 订单主表 (新增 shop_id)
-        String createOrders = "CREATE TABLE orders (" +
+        // 创建订单主表
+        db.execSQL("CREATE TABLE orders (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "order_no TEXT NOT NULL, " +
                 "shop_id INTEGER DEFAULT 0, " +
@@ -36,27 +35,32 @@ public class DbHelper extends SQLiteOpenHelper {
                 "address TEXT, " +
                 "phone TEXT, " +
                 "status INTEGER DEFAULT 1, " +
-                "create_time TEXT)";
-        db.execSQL(createOrders);
+                "create_time TEXT)");
 
-        // 3. 订单明细表 (新增 shop_name)
-        String createOrderItem = "CREATE TABLE order_item (" +
+        // 创建订单明细表
+        db.execSQL("CREATE TABLE order_item (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "order_id INTEGER NOT NULL, " +
                 "shop_name TEXT, " +
                 "food_name TEXT NOT NULL, " +
                 "price REAL NOT NULL, " +
-                "count INTEGER NOT NULL)";
-        db.execSQL(createOrderItem);
+                "count INTEGER NOT NULL)");
+
+        // 创建收货地址表
+        db.execSQL("CREATE TABLE address (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "name TEXT NOT NULL, " +
+                "phone TEXT NOT NULL, " +
+                "detail TEXT NOT NULL)");
     }
 
-    // 只保留这一个 onUpgrade 方法，删掉下面重复的！
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // 开发阶段，直接删表重建最省事
+        // 2. 只要版本号变了，直接暴力把所有的表全删了，然后重建
         db.execSQL("DROP TABLE IF EXISTS cart");
         db.execSQL("DROP TABLE IF EXISTS orders");
         db.execSQL("DROP TABLE IF EXISTS order_item");
+        db.execSQL("DROP TABLE IF EXISTS address");
         onCreate(db);
     }
 }

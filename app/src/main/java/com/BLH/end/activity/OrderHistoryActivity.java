@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.BLH.end.R;
 import com.BLH.end.adapter.OrderHistoryAdapter;
 import com.BLH.end.db.OrderDao;
+import com.BLH.end.utils.UIUtils;
+
 import java.util.List;
 
 public class OrderHistoryActivity extends AppCompatActivity {
@@ -15,7 +17,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_history);
-
+        UIUtils.setStatusBarPadding(this);
         RecyclerView recyclerView = findViewById(R.id.recycler_view_history);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
