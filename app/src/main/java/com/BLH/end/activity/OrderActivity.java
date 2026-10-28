@@ -2,6 +2,7 @@ package com.BLH.end.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -69,16 +70,49 @@ public class OrderActivity extends AppCompatActivity {
                 return;
             }
 
-            // 存入数据库
+            // 弹出支付二维码
+            showPayDialog(address, phone);
+        });
+    } // <--- 注意这里，onCreate 方法在这里结束
+
+    // 提取出的支付弹窗方法
+    private void showPayDialog(String address, String phone) {
+        // 1. 加载支付弹窗布局
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_pay, null);
+
+        // 2. 显示总金额
+        TextView tvAmount = dialogView.findViewById(R.id.tv_pay_amount);
+        tvAmount.setText("￥" + totalPrice);
+
+        // 3. 创建并显示 Dialog
+        androidx.appcompat.app.AlertDialog dialog = new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setView(dialogView)
+                .setCancelable(false)
+                .create();
+
+        // 设置背景透明，使用我们自己画的白色圆角背景
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+        dialog.show();
+
+        // 4. 点击“模拟支付成功”按钮
+        TextView btnSuccess = dialogView.findViewById(R.id.btn_pay_success);
+        btnSuccess.setOnClickListener(v -> {
+            // 4.1 真正将订单存入数据库
             new OrderDao(this).submitOrder(shopId, shopName, cartList, address, phone);
 
-            Toast.makeText(this, "下单成功！", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "支付成功，下单完成！", Toast.LENGTH_LONG).show();
 
-            // 核心修复：直接跳转回 MainActivity，并清空中间所有页面
+            // 4.2 关闭弹窗
+            dialog.dismiss();
+
+            // 4.3 跳转回首页并清空页面栈
             Intent intent = new Intent(OrderActivity.this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-            finish(); // 关闭订单页
+            finish();
         });
     }
+
 }
