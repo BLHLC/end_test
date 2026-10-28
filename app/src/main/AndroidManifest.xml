@@ -12,16 +12,21 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.End">
+        <!-- 设置为启动页 -->
         <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:windowSoftInputMode="adjustResize">
+            android:name=".activity.SplashActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- 主界面，不再作为启动页 -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+
         <activity android:name=".activity.ShopDetailActivity" />
         <activity android:name=".activity.OrderActivity" />
         <activity android:name=".activity.OrderHistoryActivity" />
