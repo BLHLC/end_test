@@ -2,7 +2,7 @@
   {
     "shopId": 1,
     "shopName": "甜蜜时光烘焙坊",
-    "logo": "https://images.unsplash.com/photo-1550617931-e17a7b70dce2?w=400",
+    "logo": "file:///android_asset/images/cook.png",
     "announcement": "新鲜现做，满50减10，下午茶首选！",
     "score": 4.8,
     "monthSale": 1200,
@@ -16,7 +16,7 @@
         "foodName": "草莓慕斯蛋糕",
         "price": 28.0,
         "ingredients": "新鲜草莓、淡奶油",
-        "image": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400",
+        "image": "file:///android_asset/images/strawberry.png",
         "description": "精选当季新鲜草莓，搭配丝滑慕斯，甜而不腻。"
       },
       {
@@ -24,7 +24,7 @@
         "foodName": "经典黑森林",
         "price": 35.0,
         "ingredients": "巧克力、樱桃、奶油",
-        "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400",
+        "image": "file:///android_asset/images/matcha.png",
         "description": "浓郁黑巧与酸甜樱桃的完美碰撞。"
       }
     ]
@@ -32,7 +32,7 @@
   {
     "shopId": 2,
     "shopName": "麦香物语面包房",
-    "logo": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400",
+    "logo": "file:///android_asset/images/cake.png",
     "announcement": "每日现烤，全场8折起！",
     "score": 4.5,
     "monthSale": 850,
@@ -46,7 +46,7 @@
         "foodName": "芝士肉松蛋糕",
         "price": 22.0,
         "ingredients": "芝士、肉松、戚风蛋糕",
-        "image": "https://images.unsplash.com/photo-1621236378699-8597faf6a176?w=400",
+        "image": "file:///android_asset/images/cake.png",
         "description": "咸甜交织，口感丰富，肉松满满。"
       },
       {
@@ -54,7 +54,7 @@
         "foodName": "抹茶千层",
         "price": 30.0,
         "ingredients": "宇治抹茶、奶油",
-        "image": "https://images.unsplash.com/photo-1514316454349-750a7fd3da3a?w=400",
+        "image": "file:///android_asset/images/matcha.png",
         "description": "微苦回甘的抹茶，层次分明的千层饼皮。"
       }
     ]

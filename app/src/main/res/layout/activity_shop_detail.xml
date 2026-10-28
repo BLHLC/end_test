@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:textColor="#FF9800"
+            android:textColor="@color/primary"
             android:textSize="12sp"/>
     </LinearLayout>
 
@@ -61,7 +61,7 @@
             android:id="@+id/btn_checkout"
             android:layout_width="100dp"
             android:layout_height="40dp"
-            android:backgroundTint="#FF9800"
+            android:backgroundTint="@color/primary"
             android:text="加入购物车"
         android:textColor="#FFFFFF" />
     </LinearLayout>

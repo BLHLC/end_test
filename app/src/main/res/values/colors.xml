@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- 主色调：樱花粉 -->
+    <color name="primary">#FF85A2</color>
+    <!-- 主色调深色：草莓红（用于按压状态） -->
+    <color name="primary_dark">#E56B84</color>
+    <!-- 点缀色：奶油白 -->
+    <color name="accent">#FFF0F5</color>
+    <!-- 文字主色：深栗色 -->
+    <color name="text_main">#4A4A4A</color>
+    <!-- 文字副色：浅灰粉 -->
+    <color name="text_sub">#999999</color>
+    <!-- 背景色：浅粉白 -->
+    <color name="bg_main">#FFF9FA</color>
+    <!-- 底部栏底色：深色 -->
+    <color name="bottom_bar">#333333</color>
+    <!-- 警告/提示色（如删除按钮） -->
+    <color name="red_warning">#FF5252</color>
 </resources>
