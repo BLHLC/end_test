@@ -25,7 +25,8 @@
         <!-- 主界面，不再作为启动页 -->
         <activity
             android:name=".MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleTop" />
 
         <activity android:name=".activity.ShopDetailActivity" />
         <activity android:name=".activity.OrderActivity" />

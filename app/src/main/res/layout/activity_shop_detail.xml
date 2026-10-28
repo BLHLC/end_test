@@ -62,7 +62,7 @@
             android:layout_width="100dp"
             android:layout_height="40dp"
             android:backgroundTint="#FF9800"
-            android:text="去结算"
-            android:textColor="#FFFFFF" />
+            android:text="加入购物车"
+        android:textColor="#FFFFFF" />
     </LinearLayout>
 </RelativeLayout>

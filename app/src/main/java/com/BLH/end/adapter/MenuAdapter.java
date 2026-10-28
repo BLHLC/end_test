@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -20,18 +19,20 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     private Context context;
     private List<FoodBean> foodList;
     private int shopId;
+    private String shopName; // 新增：用来保存店铺名字
     private CartDao cartDao;
     private OnCartChangeListener listener;
 
-    // 定义接口，用于通知 Activity 更新底部的总价
     public interface OnCartChangeListener {
         void onCartChanged();
     }
 
-    public MenuAdapter(Context context, List<FoodBean> foodList, int shopId, OnCartChangeListener listener) {
+    // 构造函数增加 shopName 参数
+    public MenuAdapter(Context context, List<FoodBean> foodList, int shopId, String shopName, OnCartChangeListener listener) {
         this.context = context;
         this.foodList = foodList;
         this.shopId = shopId;
+        this.shopName = shopName;
         this.cartDao = new CartDao(context);
         this.listener = listener;
     }
@@ -51,7 +52,6 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
         holder.tvPrice.setText("¥" + food.getPrice());
         Picasso.get().load(food.getImage()).into(holder.ivImg);
 
-        // 实时查询当前商品在数据库里的数量
         int currentCount = 0;
         for (CartBean cb : cartDao.getCartListByShop(shopId)) {
             if (cb.getFoodId() == food.getFoodId()) {
@@ -60,7 +60,6 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
             }
         }
 
-        // 控制加号、减号、数量的显示隐藏
         if (currentCount > 0) {
             holder.tvCount.setVisibility(View.VISIBLE);
             holder.btnMinus.setVisibility(View.VISIBLE);
@@ -72,9 +71,10 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
 
         // 点击加号
         holder.btnAdd.setOnClickListener(v -> {
-            cartDao.addToCart(shopId, food);
-            notifyItemChanged(position); // 刷新当前项
-            if (listener != null) listener.onCartChanged(); // 通知外层更新总价
+            // 这里传入 this.shopName
+            cartDao.addToCart(shopId, shopName, food);
+            notifyItemChanged(position);
+            if (listener != null) listener.onCartChanged();
         });
 
         // 点击减号
@@ -93,7 +93,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivImg;
         TextView tvName, tvDesc, tvPrice, tvCount;
-        TextView  btnAdd, btnMinus;
+        TextView btnAdd, btnMinus;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

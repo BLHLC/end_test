@@ -9,6 +9,10 @@ public class CartBean implements Serializable {
     private double price;
     private int count;
     private String image;
+    private String shopName; // 新增
+
+    public String getShopName() { return shopName; }
+    public void setShopName(String shopName) { this.shopName = shopName; }
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }

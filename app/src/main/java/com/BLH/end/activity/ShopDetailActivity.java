@@ -20,14 +20,13 @@ public class ShopDetailActivity extends AppCompatActivity implements MenuAdapter
     private ShopBean shopBean;
     private CartDao cartDao;
     private TextView tvTotal;
-    private MenuAdapter adapter; // 提升为全局变量，方便在 onResume 中刷新
+    private MenuAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop_detail);
 
-        // 1. 接收首页传来的 ShopBean
         shopBean = (ShopBean) getIntent().getSerializableExtra("shop");
         if (shopBean == null) {
             finish();
@@ -36,50 +35,43 @@ public class ShopDetailActivity extends AppCompatActivity implements MenuAdapter
 
         cartDao = new CartDao(this);
 
-        // 2. 初始化视图
         TextView tvName = findViewById(R.id.tv_detail_shop_name);
         TextView tvAnnounce = findViewById(R.id.tv_detail_announcement);
         tvTotal = findViewById(R.id.tv_cart_total);
-        TextView btnCheckout = findViewById(R.id.btn_checkout); // 这里最好用 TextView，因为你 XML 里可能是 TextView
+        TextView btnCheckout = findViewById(R.id.btn_checkout);
 
         tvName.setText(shopBean.getShopName());
         tvAnnounce.setText("公告：" + shopBean.getAnnouncement());
 
-        // 3. 设置商品列表
         RecyclerView recyclerView = findViewById(R.id.recycler_view_menu);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MenuAdapter(this, shopBean.getFoods(), shopBean.getShopId(), this);
+
+        // 注意这里，多传了 shopBean.getShopName()
+        adapter = new MenuAdapter(this, shopBean.getFoods(), shopBean.getShopId(), shopBean.getShopName(), this);
         recyclerView.setAdapter(adapter);
 
-        // 4. 初始化总价
         updateCartTotal();
 
-        // 5. 去结算点击事件
         btnCheckout.setOnClickListener(v -> {
             List<CartBean> cartList = cartDao.getCartListByShop(shopBean.getShopId());
             if (cartList.isEmpty()) {
-                Toast.makeText(this, "购物车是空的哦", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "购物车是空的哦~", Toast.LENGTH_SHORT).show();
             } else {
-                Intent intent = new Intent(ShopDetailActivity.this, OrderActivity.class);
-                intent.putExtra("cartList", (Serializable) cartList);
-                intent.putExtra("shopId", shopBean.getShopId());
-                intent.putExtra("shopName", shopBean.getShopName());
-                startActivity(intent);
+                Toast.makeText(this, "已加入购物车", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
     }
 
-    // 核心修复：每次页面回到前台（比如从订单页退回来），重新刷新界面
     @Override
     protected void onResume() {
         super.onResume();
         if (adapter != null) {
-            adapter.notifyDataSetChanged(); // 刷新列表里的加减号
-            updateCartTotal(); // 刷新底部总价
+            adapter.notifyDataSetChanged();
+            updateCartTotal();
         }
     }
 
-    // 更新底部总价
     private void updateCartTotal() {
         List<CartBean> cartList = cartDao.getCartListByShop(shopBean.getShopId());
         double total = 0;
