@@ -1,11 +1,14 @@
 package com.BLH.end.db;
 
+import java.util.ArrayList;
+import java.util.List;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import com.BLH.end.bean.CartBean;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import android.database.Cursor;
 import java.util.List;
 import java.util.Locale;
 
@@ -15,7 +18,24 @@ public class OrderDao {
     public OrderDao(Context context) {
         helper = new DbHelper(context);
     }
+    // 查询所有历史订单（返回一个简单的字符串列表，格式：订单号 | 店名 | 金额 | 状态）
+    public List<String> getAllOrders() {
+        SQLiteDatabase db = helper.getReadableDatabase();
+        List<String> list = new ArrayList<>();
+        Cursor cursor = db.query("orders", null, null, null, null, null, "id DESC"); // 倒序，最新的在最上面
+        while (cursor.moveToNext()) {
+            String orderNo = cursor.getString(cursor.getColumnIndexOrThrow("order_no"));
+            String shopName = cursor.getString(cursor.getColumnIndexOrThrow("shop_name"));
+            double price = cursor.getDouble(cursor.getColumnIndexOrThrow("total_price"));
+            int status = cursor.getInt(cursor.getColumnIndexOrThrow("status"));
+            String statusStr = (status == 1) ? "已支付" : "未支付";
 
+            list.add("订单号：" + orderNo + "\n店铺：" + shopName + "\n金额：￥" + price + " (" + statusStr + ")");
+        }
+        cursor.close();
+        db.close();
+        return list;
+    }
     // 提交订单
     public void submitOrder(int shopId, String shopName, List<CartBean> cartList, String address, String phone) {
         SQLiteDatabase db = helper.getWritableDatabase();
