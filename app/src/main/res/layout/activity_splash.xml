@@ -1,36 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primary"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:fitsSystemWindows="true">
 
-    <!-- 这里你可以换成你自己的蛋糕Logo图标 -->
-    <ImageView
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="50dp"
-        android:padding="15dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/splash_logo" />
-
-    <TextView
+    <!-- 中间的 Logo 和文字 -->
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="甜蜜烘焙"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:background="@drawable/bg_circle_white"
+            android:padding="15dp"
+            android:src="@drawable/splash_logo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="甜蜜烘焙"
+            android:textColor="#FFFFFF"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="每一口都是幸福的味道"
+            android:textColor="#FFF3E0"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <!-- 右上角的跳过按钮 -->
+    <TextView
+        android:id="@+id/tv_skip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/bg_skip_btn"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="6dp"
+        android:text="跳过 3s"
         android:textColor="#FFFFFF"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:letterSpacing="0.1" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="每一口都是幸福的味道"
-        android:textColor="#FFF3E0"
         android:textSize="14sp" />
 
-</LinearLayout>
+</RelativeLayout>

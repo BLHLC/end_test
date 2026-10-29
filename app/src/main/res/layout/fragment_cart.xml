@@ -2,8 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5"
-    android:orientation="vertical">
+    android:background="@color/bg_main"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
 
     <TextView
         android:layout_width="match_parent"
@@ -22,11 +23,11 @@
         android:layout_weight="1"
         android:padding="10dp"/>
 
-    <!-- 购物车底部结算栏 -->
+    <!-- 底部结算栏 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="#333333"
+        android:background="@color/primary"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="10dp">

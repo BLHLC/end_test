@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import com.BLH.end.fragment.HomeFragment;
 import com.BLH.end.fragment.UserFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.BLH.end.fragment.CartFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
 
             if (id == R.id.navigation_home) {
                 selectedFragment = new HomeFragment();
+            } else if (id == R.id.navigation_cart) {
+                // 把购物车 Fragment 加回来
+                selectedFragment = new CartFragment();
             } else if (id == R.id.navigation_user) {
                 selectedFragment = new UserFragment();
             }

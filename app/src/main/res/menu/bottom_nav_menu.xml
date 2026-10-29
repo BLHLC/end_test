@@ -5,6 +5,12 @@
         android:icon="@drawable/ic_nav_home"
         android:title="首页" />
 
+    <!-- 新增购物车 Tab -->
+    <item
+        android:id="@+id/navigation_cart"
+        android:icon="@drawable/ic_shopping_cart"
+        android:title="购物车" />
+
     <item
         android:id="@+id/navigation_user"
         android:icon="@drawable/ic_nav_user"

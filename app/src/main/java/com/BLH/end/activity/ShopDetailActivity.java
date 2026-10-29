@@ -1,6 +1,5 @@
 package com.BLH.end.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,9 +11,6 @@ import com.BLH.end.adapter.MenuAdapter;
 import com.BLH.end.bean.CartBean;
 import com.BLH.end.bean.ShopBean;
 import com.BLH.end.db.CartDao;
-import com.BLH.end.utils.UIUtils;
-
-import java.io.Serializable;
 import java.util.List;
 
 public class ShopDetailActivity extends AppCompatActivity implements MenuAdapter.OnCartChangeListener {
@@ -28,7 +24,7 @@ public class ShopDetailActivity extends AppCompatActivity implements MenuAdapter
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop_detail);
-        UIUtils.setStatusBarPadding(this);
+
         shopBean = (ShopBean) getIntent().getSerializableExtra("shop");
         if (shopBean == null) {
             finish();
@@ -47,19 +43,18 @@ public class ShopDetailActivity extends AppCompatActivity implements MenuAdapter
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view_menu);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        // 注意这里，多传了 shopBean.getShopName()
         adapter = new MenuAdapter(this, shopBean.getFoods(), shopBean.getShopId(), shopBean.getShopName(), this);
         recyclerView.setAdapter(adapter);
 
         updateCartTotal();
 
+        // 核心改动：点击底栏按钮，提示并直接退回主界面
         btnCheckout.setOnClickListener(v -> {
             List<CartBean> cartList = cartDao.getCartListByShop(shopBean.getShopId());
             if (cartList.isEmpty()) {
                 Toast.makeText(this, "购物车是空的哦~", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "已加入购物车", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "已加入购物车，请前往底部购物车结算", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
